@@ -1,4 +1,3 @@
-5 * 5
-a = 4
-b = 6
-c = a + b
+function hello () 
+    a = a + b
+end
