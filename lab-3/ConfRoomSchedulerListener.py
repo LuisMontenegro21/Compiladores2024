@@ -62,5 +62,23 @@ class ConfRoomSchedulerListener(ParseTreeListener):
         pass
 
 
+    # Enter a parse tree produced by ConfRoomSchedulerParser#name.
+    def enterName(self, ctx:ConfRoomSchedulerParser.NameContext):
+        pass
+
+    # Exit a parse tree produced by ConfRoomSchedulerParser#name.
+    def exitName(self, ctx:ConfRoomSchedulerParser.NameContext):
+        pass
+
+
+    # Enter a parse tree produced by ConfRoomSchedulerParser#description.
+    def enterDescription(self, ctx:ConfRoomSchedulerParser.DescriptionContext):
+        pass
+
+    # Exit a parse tree produced by ConfRoomSchedulerParser#description.
+    def exitDescription(self, ctx:ConfRoomSchedulerParser.DescriptionContext):
+        pass
+
+
 
 del ConfRoomSchedulerParser

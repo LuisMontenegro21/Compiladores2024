@@ -20,8 +20,9 @@ class ConfRoomSchedulerSemanticChecker(ConfRoomSchedulerListener):
         start_time = reserve_ctx.TIME(0).getText()
         end_time = reserve_ctx.TIME(1).getText()
         
-        name = reserve_ctx.NAME().getText() if reserve_ctx.NAME() else "unknown"
-        
+        name = ' '.join([part.getText() for part in reserve_ctx.name().WORD()])
+        description = ''.join([char.getText() for char in reserve_ctx.description().CHAR()]) if reserve_ctx.description() else "No description"
+
         if not self.validate_time(start_time) or not self.validate_time(end_time):
             print(f"Error: Invalid time format for reservation by {name}.")
             return
@@ -31,8 +32,8 @@ class ConfRoomSchedulerSemanticChecker(ConfRoomSchedulerListener):
         if key in self.reservations:
             print(f"Error: Room {room_id} is already reserved on {date} from {start_time} to {end_time} by {self.reservations[key]}.")
         else:
-            self.reservations[key] = name
-            print(f"Reserved Room {room_id} on {date} from {start_time} to {end_time} by {name}.")
+            self.reservations[key] = {"name": name, "description": description}
+            print(f"Reserved Room {room_id} on {date} from {start_time} to {end_time} by {name} with description: {description}.")
             print(f"Current Reservations: {self.reservations}")
 
     def enterCancelStat(self, ctx: ConfRoomSchedulerParser.CancelStatContext):
@@ -49,7 +50,7 @@ class ConfRoomSchedulerSemanticChecker(ConfRoomSchedulerListener):
         key = (room_id, date, start_time, end_time)
         
         if key in self.reservations:
-            print(f"Cancelled reservation for Room {room_id} on {date} from {start_time} to {end_time} by {self.reservations[key]}.")
+            print(f"Cancelled reservation for Room {room_id} on {date} from {start_time} to {end_time} by {self.reservations[key]['name']} with description: {self.reservations[key]['description']}.")
             del self.reservations[key]
             print(f"Current Reservations: {self.reservations}")
         else:
@@ -61,7 +62,7 @@ def main(argv):
     stream = CommonTokenStream(lexer)
     parser = ConfRoomSchedulerParser(stream)
     tree = parser.prog()  # We are using 'prog' since this is the starting rule based on our ConfRoomScheduler grammar, yay!
-    print(tree.toStringTree(recog=parser))
+    #print(tree.toStringTree(recog=parser))
 
     semantic_checker = ConfRoomSchedulerSemanticChecker()
     walker = ParseTreeWalker()

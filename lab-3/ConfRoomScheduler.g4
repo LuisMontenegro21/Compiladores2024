@@ -7,15 +7,18 @@ stat: reserve NEWLINE                # reserveStat
     | NEWLINE                        # blank
     ;
 
-reserve: 'RESERVAR' ID 'PARA' DATE 'DE' TIME 'A' TIME ('CON' NAME)? ; 
+reserve: 'RESERVAR' ID 'PARA' DATE 'DE' TIME 'A' TIME 'CON' name 'DESCR' description ; 
 
 cancel: 'CANCELAR' ID 'PARA' DATE 'DE' TIME 'A' TIME ; 
+
+name: WORD (WS WORD)* ;
+description: CHAR* ; 
 
 DATE: DIGIT DIGIT '/' DIGIT DIGIT '/' DIGIT DIGIT DIGIT DIGIT ; 
 TIME: DIGIT DIGIT ':' DIGIT DIGIT ; 
 ID  : [a-zA-Z0-9]+ ; 
-NAME: [a-zA-Z]+([ \t]+[a-zA-Z]+)* ;
 NEWLINE:'\r'? '\n' ; 
 WS  : [ \t]+ -> skip ; 
-
+WORD : [a-zA-Z]+ ;
+CHAR : ~[\r\n] ; 
 fragment DIGIT : [0-9] ;
